@@ -1,7 +1,7 @@
 
 
 export function TwitterFollowCard({formatUserName, userName, name, isFollowing}){
-    
+    //renderizado condicional
     return(
         
             <article className='tw-followCard'>
