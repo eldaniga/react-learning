@@ -1,7 +1,20 @@
+import { useState } from "react";
 
-
-export function TwitterFollowCard({formatUserName, userName, name, isFollowing}){
+export function TwitterFollowCard({formatUserName, userName, name}){
     //renderizado condicional
+    const [isFollowing, setIsFollowing] = useState(false);
+   
+    console.log("render with name in TFC: ", userName)
+
+    const text = isFollowing ? "Siguiendo" : "Seguir";
+    const buttonClassName = isFollowing ? "tw-followCard-button is-following"
+            : "tw-followCard-button";
+
+
+            
+    const handleClick = ()=>{
+                setIsFollowing(!isFollowing)
+    }
     return(
         
             <article className='tw-followCard'>
@@ -13,14 +26,11 @@ export function TwitterFollowCard({formatUserName, userName, name, isFollowing})
                 </div>
             </header>
             <aside>
-                <button className="tw-followCard-button">
-                    Seguir
+                <button className={buttonClassName} onClick={handleClick}>
+                    {text} 
                 </button>
             </aside>
         </article>
-
-        
-        
 
     )
 
