@@ -11,20 +11,14 @@ const TURNS = {
 
 
 const Square = ({children, isSelected, wasMarked,  updateBoard, index}) =>{
-  const [clickCount, setClickCount] = useState(0);
+  
   const className = `square ${isSelected ? "is-selected" : ''}`
   
 
   const handleClick = ()=>{
-    //console.log("number of clicks " + clickCount)
-  
-    setClickCount(clickCount+1);
-    console.log("number of clicks after clicking: " + clickCount)
-    
-    //let indexID = index+1;
-    if(clickCount ==  1){
+
       updateBoard(index)
-    }
+    
     
   }
   return(
@@ -34,26 +28,46 @@ const Square = ({children, isSelected, wasMarked,  updateBoard, index}) =>{
   )
 }
 
-
-
+const WINNER_COMBOS = {
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+}
 
 
 
 function App() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(TURNS.X)
+  //null no hay ganador, false empate
+  const [winner, setWinner] = useState(null)
 
 
   const updateBoard = (index)=>{
-    //board[index] = turn;   //addding the value
-    let newBoard = board;
-    newBoard[index] = turn;
-    setBoard(newBoard)
+    //actualizar tablero
+    if(board[index]) {return 
+      
 
+    }  else{
+      let newBoard = [...board];
+      newBoard[index] = turn;
+       setBoard(newBoard)
+
+
+    //cambiar turno
     const newTurn =  turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
 
-    console.log("nuevo turno : " + turn + "posicion: " + index)
+   
+
+    }
+    
+    
   
     }
   
