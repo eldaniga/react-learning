@@ -4,8 +4,8 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 const TURNS = {
-  X: "x",
-  O: "o"
+  X: "X",
+  O: "O"
 }
 
 
@@ -28,7 +28,7 @@ const Square = ({children, isSelected, wasMarked,  updateBoard, index}) =>{
   )
 }
 
-const WINNER_COMBOS = {
+const WINNER_COMBOS = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -37,7 +37,7 @@ const WINNER_COMBOS = {
   [2, 5, 8],
   [0, 4, 8],
   [2, 4, 6]
-}
+]
 
 
 
@@ -48,15 +48,48 @@ function App() {
   const [winner, setWinner] = useState(null)
 
 
+
+  const resetGame = ()=>{
+    setBoard(Array(9).fill(null));
+    setTurn(TURNS.X)
+    setWinner(null)
+  }
+
+  const checkEndGame = (newBoard)=>{
+      return newBoard.every((square)=> square !== null)
+  }
+
+  const checkWinner = (boardToCheck)=>{
+
+    //check every posibility
+      for(const combo of WINNER_COMBOS){
+        const [a,b,c] = combo;
+        console.log("Combo: " + combo)
+        if(
+          boardToCheck[a] &&
+          boardToCheck[a] === boardToCheck[b] &&
+          boardToCheck[b] === boardToCheck[c] 
+        ){
+          return boardToCheck[a] //winner x u o
+        }
+        
+      }
+      return null;
+  }
   const updateBoard = (index)=>{
     //actualizar tablero
-    if(board[index]) {return 
-      
-
-    }  else{
+    if(board[index] || winner) {return } 
+    else{
       let newBoard = [...board];
       newBoard[index] = turn;
-       setBoard(newBoard)
+      setBoard(newBoard)
+      const newWinner = checkWinner(newBoard)
+      if(newWinner){
+        console.log("The winner is : " + newWinner)
+        setWinner(newWinner)
+      }else if(checkEndGame(newBoard)){
+        setWinner(false)
+      }
 
 
     //cambiar turno
@@ -75,8 +108,9 @@ function App() {
 
 
   return ( 
-    <main className="board">
+    <main className="board" >
         <h1>TIC TAC TOE</h1>
+        <button onClick={resetGame}>Reset Juego</button>
         <section className="game">
           {
             board.map((_, index) => {
@@ -94,6 +128,29 @@ function App() {
           <Square isSelected={turn==TURNS.X}>{TURNS.X}</Square>
           <Square isSelected={turn==TURNS.O}>{TURNS.O}</Square>
         </section>
+
+
+        {
+          winner!==null && (
+            <section className='winner'>
+                <div className='text'>
+                  <h2>
+                    {
+                      winner===false
+                      ? "Empate"
+                      : "Ha ganado: " + winner
+                    }
+                  </h2>
+                  <header className='win'>
+                    {winner && <Square>{winner}</Square>}
+                  </header>
+                  <footer>
+                    <button onClick={resetGame}>Empezar de Nuevo</button>
+                  </footer>
+                </div>
+            </section>
+          )
+        }
     </main>
     
   
